@@ -21,22 +21,38 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 380px;
-            height: 380px;
+            width: 320px;
+            height: 320px;
             background-image: url('logo.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.05;
+            opacity: 0.04;
             pointer-events: none;
             z-index: 0;
         }
 
         /* High-Fidelity Printing Stylesheet Rules */
         @media print {
-            html, body { background: #ffffff; color: #000000; font-size: 14px; margin: 0; padding: 0; }
+            @page {
+                size: A4 portrait;
+                margin: 12mm 10mm 12mm 10mm;
+            }
+            html, body { 
+                background: #ffffff; 
+                color: #000000; 
+                font-size: 13px; 
+                margin: 0; 
+                padding: 0; 
+            }
             .no-print { display: none !important; }
-            .print-container { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 10px !important; max-width: 100% !important; }
+            .print-container { 
+                box-shadow: none !important; 
+                border: none !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                max-width: 100% !important; 
+            }
             
             /* Retain side-by-side grid alignment structural boxes when printing */
             .print-grid {
@@ -58,7 +74,12 @@
                 font-weight: 700;
                 color: #000000 !important;
             }
-            .watermark-container::before { opacity: 0.07; }
+            .watermark-container::before { opacity: 0.06; }
+            
+            /* Enforce crisp single-page restriction layout containment rules */
+            .net-amount-cell, .price-field, .qty-field {
+                font-weight: 800 !important;
+            }
         }
     </style>
 </head>
@@ -75,42 +96,42 @@
         </div>
     </div>
 
-    <main class="print-container max-w-4xl mx-auto bg-white my-6 p-8 md:p-12 shadow-sm border border-gray-200 rounded-sm space-y-6 watermark-container text-sm">
+    <main class="print-container max-w-4xl mx-auto bg-white my-4 p-6 md:p-10 shadow-sm border border-gray-200 rounded-sm space-y-4 watermark-container text-xs sm:text-sm">
         
-        <header class="border-b-4 border-blue-600 pb-3">
+        <header class="border-b-4 border-blue-600 pb-2">
             <div class="flex justify-between items-start">
-                <div class="flex items-center gap-6">
-                    <img src="logo.png" alt="Logo" class="w-32 h-32 object-contain fallback-hidden" onerror="this.style.display='none'; document.getElementById('logo_fallback').style.display='block'">
-                    <div id="logo_fallback" class="hidden bg-blue-600 p-6 text-white font-black text-4xl rounded-full leading-none shadow-sm">👁</div>
+                <div class="flex items-center gap-5">
+                    <img src="logo.png" alt="Logo" class="w-24 h-24 object-contain fallback-hidden" onerror="this.style.display='none'; document.getElementById('logo_fallback').style.display='block'">
+                    <div id="logo_fallback" class="hidden bg-blue-600 p-5 text-white font-black text-3xl rounded-full leading-none shadow-sm">👁</div>
                     <div>
-                        <h1 class="text-3xl font-black text-blue-900 tracking-tight leading-none">SHIVOM EYE CARE</h1>
-                        <p class="text-xs font-black text-blue-600 uppercase tracking-widest mt-1.5">Your Eyes, Our Care</p>
-                        <p class="text-xs text-blue-950 font-bold tracking-tight mt-1">GSTIN/UIN: 07BBPPM0755F1ZJ</p>
-                        <p class="text-xs text-gray-600 font-medium mt-1.5 leading-tight">
+                        <h1 class="text-2xl font-black text-blue-900 tracking-tight leading-none">SHIVOM EYE CARE</h1>
+                        <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mt-1">Your Eyes, Our Care</p>
+                        <p class="text-[11px] text-blue-950 font-bold tracking-tight mt-0.5">GSTIN/UIN: 07BBPPM0755F1ZJ</p>
+                        <p class="text-xs text-gray-600 font-medium mt-1 leading-tight">
                             <strong>Dr. Kenshuk Marwah</strong> | MS, FICO (UK), DNB, FVRS | 18+ Years of trust<br>
                             DMC Reg No: 29327 | shivomeyecare@gmail.com
                         </p>
                     </div>
                 </div>
-                <div class="text-right text-xs text-gray-600 space-y-1 font-medium">
-                    <p class="font-bold text-blue-700 text-sm">📞 Call / WhatsApp: +91 7827133830</p>
-                    <p class="mt-1">DDA Flats Kalkaji, Block L 1, Kalkaji,</p>
+                <div class="text-right text-xs text-gray-600 space-y-0.5 font-medium">
+                    <p class="font-bold text-blue-700">📞 Call / WhatsApp: +91 7827133830</p>
+                    <p class="mt-0.5">DDA Flats Kalkaji, Block L 1, Kalkaji,</p>
                     <p>New Delhi, Delhi 110019</p>
                     <p>Timings: Mon-Sat 9 AM to 9 PM</p>
-                    <p class="text-blue-600 font-bold text-xs pt-0.5">www.shivomeyecare.com</p>
+                    <p class="text-blue-600 font-bold text-xs">www.shivomeyecare.com</p>
                 </div>
             </div>
         </header>
 
-        <section class="print-grid grid grid-cols-1 md:grid-cols-12 gap-6 text-sm border-b border-gray-200 pb-5 relative z-10">
-            <div class="print-col md:col-span-6 space-y-2">
+        <section class="print-grid grid grid-cols-1 md:grid-cols-12 gap-4 text-xs sm:text-sm border-b border-gray-200 pb-3 relative z-10">
+            <div class="print-col md:col-span-6 space-y-1.5">
                 <div class="flex items-center gap-1"><span class="font-bold text-gray-900 min-w-[75px]">Patient:</span><input type="text" id="bill_name" value="Master Yuvan" class="w-full bg-transparent font-black text-gray-900 focus:outline-none text-base"></div>
                 <div class="flex items-center gap-1"><span class="font-bold text-gray-600 min-w-[75px]">Age / Sex:</span><input type="text" id="bill_age_sex" value="16 Years / Male" class="w-full bg-transparent font-bold text-gray-800 focus:outline-none"></div>
                 <div class="flex items-center gap-1"><span class="font-bold text-gray-600 min-w-[75px]">Phone:</span><input type="text" id="bill_phone" value="8700719377" class="w-full bg-transparent font-bold text-gray-800 focus:outline-none"></div>
                 <div class="flex items-center gap-1"><span class="font-bold text-gray-600 min-w-[75px]">Address:</span><input type="text" id="bill_address" value="Gurugram, Haryana" class="w-full bg-transparent font-bold text-gray-800 focus:outline-none"></div>
             </div>
 
-            <div class="print-col md:col-span-6 md:pl-8 space-y-2">
+            <div class="print-col md:col-span-6 md:pl-8 space-y-1.5">
                 <div class="flex items-center gap-1">
                     <span class="font-bold text-gray-600 min-w-[120px]">Booking Date:</span>
                     <input type="text" id="bill_date" class="w-full bg-transparent font-bold text-gray-800 focus:outline-none">
@@ -129,17 +150,17 @@
         </section>
 
         <div class="text-center relative z-10">
-            <span class="text-sm font-black tracking-widest uppercase border-b-2 border-gray-800 px-8 pb-0.5 text-gray-900">Tax Invoice</span>
+            <span class="text-xs font-black tracking-widest uppercase border-b-2 border-gray-800 px-8 pb-0.5 text-gray-900">Tax Invoice</span>
         </div>
 
         <section class="relative z-10">
-            <table class="w-full border-collapse border border-gray-300 text-sm text-center" id="invoice_table">
+            <table class="w-full border-collapse border border-gray-300 text-xs sm:text-sm text-center shadow-sm" id="invoice_table">
                 <thead>
                     <tr class="bg-gray-50 border-b border-gray-300 font-bold text-gray-800 text-left">
-                        <th class="p-3 border-r border-gray-300 w-[60%] text-left">Particulars</th>
-                        <th class="p-3 border-r border-gray-300 text-right w-[15%]">Rate (Rs)</th>
-                        <th class="p-3 border-r border-gray-300 text-center w-[10%]">QTY</th>
-                        <th class="p-3 text-right w-[15%]">Amount (Rs)</th>
+                        <th class="p-2.5 border-r border-gray-300 w-[60%] text-left">Particulars</th>
+                        <th class="p-2.5 border-r border-gray-300 text-right w-[15%]">Rate (Rs)</th>
+                        <th class="p-2.5 border-r border-gray-300 text-center w-[10%]">QTY</th>
+                        <th class="p-2.5 text-right w-[15%]">Amount (Rs)</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200" id="billing_rows_body">
@@ -150,62 +171,70 @@
         <datalist id="medications_services_list">
         </datalist>
 
-        <section class="flex flex-col items-end pt-1 text-sm font-semibold text-gray-800 relative z-10">
-            <div class="w-full sm:w-1/2 border border-gray-300 divide-y divide-gray-200">
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end pt-1 text-xs sm:text-sm font-semibold text-gray-800 relative z-10">
+            <!-- Left-aligned Reference terms block to occupy whitespace structural area cleanly -->
+            <div class="border border-gray-300 p-2.5 rounded bg-gray-50/30 space-y-1 h-full flex flex-col justify-between">
+                <div>
+                    <span class="text-[10px] uppercase font-black text-blue-900 tracking-wide block mb-0.5">Terms & Conditions:</span>
+                    <p class="text-[11px] text-gray-500 font-medium leading-tight">1. Goods once sold cannot be taken back or exchanged.</p>
+                    <p class="text-[11px] text-gray-500 font-medium leading-tight">2. Please complete testing/evaluations as prescribed within validity timeframe slots.</p>
+                </div>
+                <div class="pt-2 border-t border-dashed border-gray-200 flex items-center gap-2">
+                    <span class="text-gray-600 uppercase text-[10px] font-black min-w-[110px]">Received with Thanks:</span>
+                    <div id="bill_words_amount" class="w-full font-black text-blue-900 tracking-wide uppercase italic text-[11px]">Rs. Zero Only</div>
+                </div>
+            </div>
 
-                <div class="flex justify-between items-center p-3">
-                    <span class="text-right flex-1 pr-4 text-gray-600 font-bold uppercase text-xs">Total Consultation Amount:</span>
+            <!-- Right-aligned ledger balances card layout blocks -->
+            <div class="border border-gray-300 divide-y divide-gray-200 rounded overflow-hidden">
+                <div class="flex justify-between items-center p-2">
+                    <span class="text-right flex-1 pr-4 text-gray-600 font-bold uppercase text-[11px]">Total Consultation Amount:</span>
                     <span class="w-24 text-right font-black text-gray-900" id="label_bill_amount">0</span>
                 </div>
 
-                <div class="flex justify-between items-center p-3 bg-slate-50/60">
+                <div class="flex justify-between items-center p-2 bg-slate-50/60">
                     <div class="text-right flex-1 pr-4 flex items-center justify-end gap-1">
-                        <span class="text-gray-600 font-bold uppercase text-xs">Discount Amount:</span>
-                        <input type="text" id="input_discount" value="0" oninput="recalculateLedgerTotals()" class="w-20 border border-gray-300 rounded bg-white text-center text-xs font-black no-print py-0.5 text-gray-900">
+                        <span class="text-gray-600 font-bold uppercase text-[11px]">Discount Amount:</span>
+                        <input type="text" id="input_discount" value="0" oninput="recalculateLedgerTotals()" class="w-16 border border-gray-300 rounded bg-white text-center text-xs font-black no-print py-0.5 text-gray-900">
                         <span class="print:inline hidden text-gray-900 font-black text-xs" id="print_discount_label"></span>
                     </div>
                     <span class="w-24 text-right font-black text-gray-900" id="label_discount_computed">0</span>
                 </div>
 
-                <div class="flex justify-between items-center p-3 text-gray-700 bg-slate-50/30">
-                    <span class="text-right flex-1 pr-4 font-bold uppercase text-xs">CGST @ 2.5%:</span>
+                <div class="flex justify-between items-center p-2 text-gray-700 bg-slate-50/30">
+                    <span class="text-right flex-1 pr-4 font-bold uppercase text-[11px]">CGST @ 2.5%:</span>
                     <span class="w-24 text-right font-black text-gray-900" id="label_cgst">0</span>
                 </div>
 
-                <div class="flex justify-between items-center p-3 text-gray-700 bg-slate-50/30">
-                    <span class="text-right flex-1 pr-4 font-bold uppercase text-xs">SGST @ 2.5%:</span>
+                <div class="flex justify-between items-center p-2 text-gray-700 bg-slate-50/30">
+                    <span class="text-right flex-1 pr-4 font-bold uppercase text-[11px]">SGST @ 2.5%:</span>
                     <span class="w-24 text-right font-black text-gray-900" id="label_sgst">0</span>
                 </div>
 
-                <div class="flex justify-between items-center p-3 font-black bg-blue-50/30 text-gray-900">
-                    <span class="text-right flex-1 pr-4 uppercase text-xs tracking-wider">Final Payable Amount (Incl. GST):</span>
-                    <span class="w-24 text-right text-base font-black text-blue-900" id="label_payable">0</span>
+                <div class="flex justify-between items-center p-2 font-black bg-blue-50/30 text-gray-900">
+                    <span class="text-right flex-1 pr-4 uppercase text-[11px] tracking-wider">Final Payable Amount (Incl. GST):</span>
+                    <span class="w-24 text-right font-black text-blue-900 text-sm sm:text-base" id="label_payable">0</span>
                 </div>
 
-                <div class="flex justify-between items-center p-3">
+                <div class="flex justify-between items-center p-2">
                     <div class="text-right flex-1 pr-4 flex items-center justify-end gap-1">
-                        <span class="text-gray-600 font-bold uppercase text-xs">Paid Amount:</span>
-                        <input type="number" id="input_paid" value="0" oninput="recalculateLedgerTotals()" class="w-24 border border-gray-300 rounded bg-white text-center text-xs font-black no-print py-0.5 text-gray-900">
+                        <span class="text-gray-600 font-bold uppercase text-[11px]">Paid Amount:</span>
+                        <input type="number" id="input_paid" value="0" oninput="recalculateLedgerTotals()" class="w-20 border border-gray-300 rounded bg-white text-center text-xs font-black no-print py-0.5 text-gray-900">
                     </div>
                     <span class="w-24 text-right font-black text-gray-900" id="label_paid_printed">0</span>
                 </div>
 
-                <div class="flex justify-between items-center p-3 bg-red-50/40">
-                    <span class="text-right flex-1 pr-4 text-red-900 font-black uppercase text-xs">Outstanding Due:</span>
-                    <span class="w-24 text-right font-black text-red-700 text-base" id="label_balance">0</span>
+                <div class="flex justify-between items-center p-2 bg-red-50/40">
+                    <span class="text-right flex-1 pr-4 text-red-900 font-black uppercase text-[11px]">Outstanding Due:</span>
+                    <span class="w-24 text-right font-black text-red-700 text-sm" id="label_balance">0</span>
                 </div>
             </div>
         </section>
 
-        <div class="border border-gray-300 p-3 text-sm font-bold text-gray-800 rounded bg-gray-50/50 relative z-10 flex items-center gap-2">
-            <span class="text-gray-600 uppercase text-xs font-black min-w-[150px]">Received with Thanks:</span>
-            <div id="bill_words_amount" class="w-full font-black text-blue-900 tracking-wide uppercase italic">Rs. Zero Only</div>
-        </div>
-
-        <footer class="pt-20 flex justify-end items-center text-sm text-gray-800 font-bold relative z-10">
-            <div class="text-center w-64 border-t border-gray-400 pt-2">
-                <p class="text-gray-900 text-sm">Authorized Signatory</p>
-                <p class="text-xs text-gray-500 font-medium mt-0.5">Shivom Eye Care</p>
+        <footer class="pt-12 flex justify-end items-center text-xs sm:text-sm text-gray-800 font-bold relative z-10">
+            <div class="text-center w-60 border-t border-gray-400 pt-1.5">
+                <p class="text-gray-900 text-xs sm:text-sm">Authorized Signatory</p>
+                <p class="text-[11px] text-gray-500 font-medium mt-0.5">Shivom Eye Care</p>
             </div>
         </footer>
     </main>
@@ -313,8 +342,12 @@
             "Vorizone": 360,
             "Zentob Eye Ointment": 190,
             "Zenvit-Gold": 1017,
-            "Zol-AH": 100
+            "Zol-AH": 100,
+            "ZEISS FSV Bluegurard ClearAR UV lenses": 2000,
+            "Cooper Vision-ASPIRE GO MAX CL": 3745
         };
+
+        const MINIMUM_ROWS_COUNT = 5;
 
         function populateSearchDatalist() {
             const datalist = document.getElementById('medications_services_list');
@@ -402,20 +435,61 @@
             document.getElementById('label_invoice_num').value = `${day}/${month}/${year}/${paddedSequenceStr}`;
         }
 
+        function buildStructuralGridShell() {
+            const tbody = document.getElementById('billing_rows_body');
+            const structuralRowsCount = tbody.querySelectorAll('tr:not(.blank-placeholder-row)').length;
+            
+            // Remove previous dynamic padding nodes safely
+            tbody.querySelectorAll('.blank-placeholder-row').forEach(node => node.remove());
+            
+            // Inject empty structural lines if under the fixed threshold
+            if(structuralRowsCount < MINIMUM_ROWS_COUNT) {
+                const paddingNeeded = MINIMUM_ROWS_COUNT - structuralRowsCount;
+                for(let idx = 0; idx < paddingNeeded; idx++) {
+                    const blankRow = document.createElement('tr');
+                    blankRow.className = "blank-placeholder-row h-[38px] text-transparent select-none pointer-events-none";
+                    blankRow.innerHTML = `
+                        <td class="p-3 border-r border-gray-300 text-left">&nbsp;</td>
+                        <td class="p-3 border-r border-gray-300">&nbsp;</td>
+                        <td class="p-3 border-r border-gray-300">&nbsp;</td>
+                        <td class="p-3 text-right">&nbsp;</td>
+                    `;
+                    tbody.appendChild(blankRow);
+                }
+            }
+        }
+
         function addNewBillingRow(initialService = "", initialPrice = 0) {
             const tbody = document.getElementById('billing_rows_body');
+            
+            // Insert tracking rows right ahead of structural placeholder blanks
+            const placeholders = tbody.querySelectorAll('.blank-placeholder-row');
+            const targetRefNode = placeholders.length > 0 ? placeholders[0] : null;
+            
             const tr = document.createElement('tr');
             const roundedPrice = Math.round(initialPrice);
             
             tr.innerHTML = `
-                <td class="p-3 border-r border-gray-300 text-left">
+                <td class="p-2 border-r border-gray-300 text-left relative">
                     <input type="text" list="medications_services_list" value="${initialService}" oninput="handleItemSearchInput(this)" placeholder="Type to search service or medicine..." class="particulars-input w-full bg-transparent focus:outline-none font-bold text-gray-900 border-b border-dashed border-gray-200 py-0.5">
+                    <button type="button" onclick="removeActiveBillingRow(this)" class="no-print absolute -left-6 top-1/2 -translate-y-1/2 text-red-500 hover:text-red-700 text-xs font-bold opacity-0 hover:opacity-100 transition-opacity focus:opacity-100">✕</button>
                 </td>
-                <td class="p-3 border-r border-gray-300"><input type="number" value="${roundedPrice}" oninput="recalculateLedgerTotals()" class="w-full bg-transparent text-right focus:outline-none price-field font-bold"></td>
-                <td class="p-3 border-r border-gray-300"><input type="number" value="1" oninput="recalculateLedgerTotals()" class="w-full bg-transparent text-center focus:outline-none qty-field font-bold"></td>
-                <td class="p-3 font-black text-gray-900 text-right net-amount-cell">${roundedPrice}</td>
+                <td class="p-2 border-r border-gray-300"><input type="number" value="${roundedPrice}" oninput="recalculateLedgerTotals()" class="w-full bg-transparent text-right focus:outline-none price-field font-bold"></td>
+                <td class="p-2 border-r border-gray-300"><input type="number" value="1" oninput="recalculateLedgerTotals()" class="w-full bg-transparent text-center focus:outline-none qty-field font-bold"></td>
+                <td class="p-2 font-black text-gray-900 text-right net-amount-cell">${roundedPrice}</td>
             `;
-            tbody.appendChild(tr);
+            
+            if(targetRefNode) {
+                tbody.insertBefore(tr, targetRefNode);
+            } else {
+                tbody.appendChild(tr);
+            }
+            
+            recalculateLedgerTotals();
+        }
+
+        function removeActiveBillingRow(buttonElement) {
+            buttonElement.closest('tr').remove();
             recalculateLedgerTotals();
         }
 
@@ -423,7 +497,8 @@
             const tbody = document.getElementById('billing_rows_body');
             let computedSubtotal = 0;
 
-            Array.from(tbody.children).forEach(row => {
+            const operationalRows = tbody.querySelectorAll('tr:not(.blank-placeholder-row)');
+            operationalRows.forEach(row => {
                 const qty = parseFloat(row.querySelector('.qty-field').value) || 0;
                 const price = Math.round(parseFloat(row.querySelector('.price-field').value) || 0);
                 const netAmount = Math.round(qty * price);
@@ -448,10 +523,8 @@
 
             document.getElementById('label_discount_computed').innerText = computedDiscountVal;
 
-            // Base taxable amount after matching target discount adjustments
             const taxableBasisAmount = Math.max(0, computedSubtotal - computedDiscountVal);
             
-            // Generate clean rounded 2.5% SGST and 2.5% CGST splits
             const calculatedCgst = Math.round(taxableBasisAmount * 0.025);
             const calculatedSgst = Math.round(taxableBasisAmount * 0.025);
 
@@ -468,6 +541,9 @@
             document.getElementById('label_balance').innerText = balanceOutstanding;
 
             document.getElementById('bill_words_amount').innerText = convertAmountToWords(currentPaidVal);
+            
+            // Re-align cosmetic structural balancing boxes seamlessly
+            buildStructuralGridShell();
         }
 
         function clearInvoiceBoard() {
@@ -482,6 +558,7 @@
                 
                 initializeDefaultDate();
                 document.getElementById('billing_rows_body').innerHTML = "";
+                buildStructuralGridShell();
                 addNewBillingRow();
                 generateSystemInvoiceNumber();
             }
@@ -490,7 +567,9 @@
         window.addEventListener('DOMContentLoaded', () => {
             initializeDefaultDate();
             populateSearchDatalist();
+            buildStructuralGridShell();
             
+            // Pre-seed demo setup values cleanly
             addNewBillingRow("Consultation", 300);
             addNewBillingRow("Sono Fusion", 450);
             
