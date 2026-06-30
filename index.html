@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Console - Shivom Eye Care</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input:focus, select:focus {
+            background-color: #f0f7ff;
+            border-color: #1e40af;
+        }
+
+        /* Watermark Wrapper Styling */
+        .watermark-container {
+            position: relative;
+        }
+        .watermark-container::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            height: 380px;
+            background-image: url('logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* High-Fidelity Printing Stylesheet Rules */
+        @media print {
+            html, body { background: #ffffff; color: #000000; font-size: 14px; margin: 0; padding: 0; }
+            .no-print { display: none !important; }
+            .print-container { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 10px !important; max-width: 100% !important; }
+            
+            /* Retain side-by-side grid alignment structural boxes when printing */
+            .print-grid {
+                display: table !important;
+                width: 100% !important;
+            }
+            .print-col {
+                display: table-cell !important;
+                width: 50% !important;
+                vertical-align: top !important;
+            }
+            
+            input, select, textarea { 
+                border: none !important; 
+                outline: none !important; 
+                background: transparent !important; 
+                padding: 0 !important; 
+                appearance: none;
+                font-weight: 700;
+                color: #000000 !important;
+            }
+            .watermark-container::before { opacity: 0.07; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-gray-800 font-sans pb-12 text-sm">
+
+    <div class="no-print bg-slate-900 text-white sticky top-0 z-50 px-4 py-3 shadow-md">
+        <div class="max-w-4xl mx-auto w-full flex items-center justify-between">
+            <span class="text-xs uppercase font-black tracking-widest text-blue-400 bg-blue-950/50 px-3 py-1 rounded border border-blue-900">Billing Console</span>
+            <div class="flex gap-2">
+                <button type="button" onclick="addNewBillingRow()" class="bg-slate-700 hover:bg-slate-600 text-xs font-bold px-3 py-1.5 rounded transition">+ Add Line Item</button>
+                <button type="button" onclick="clearInvoiceBoard()" class="bg-red-950 hover:bg-red-900 border border-red-800 text-xs font-bold px-3 py-1.5 rounded transition">⟲ Reset Board</button>
+                <button type="button" onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-xs font-bold px-4 py-1.5 rounded transition shadow-sm">💾 Print / Save Bill PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="print-container max-w-4xl mx-auto bg-white my-6 p-8 md:p-12 shadow-sm border border-gray-200 rounded-sm space-y-6 watermark-container text-sm">
+        
+        <header class="border-b-4 border-blue-600 pb-3">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center gap-6">
+                    <img src="logo.png" alt="Logo" class="w-32 h-32 object-contain fallback-hidden" onerror="this.style.display='none'; document.getElementById('logo_fallback').style.display='block'">
+                    <div id="logo_fallback" class="hidden bg-blue-600 p-6 text-white font-black text-4xl rounded-full leading-none shadow-sm">👁</div>
+                    <div>
+                        <h1 class="text-3xl font-black text-blue-900 tracking-tight leading-none">SHIVOM EYE CARE</h1>
+                        <p class="text-xs font-black text-blue-600 uppercase tracking-widest mt-1.5">Your Eyes, Our Care</p>
+                        <p class="text-xs text-blue-950 font-bold tracking-tight mt-1">GSTIN/UIN: 07BBPPM0755F1ZJ</p>
+                        <p class="text-xs text-gray-600 font-medium mt-1.5 leading-tight">
+                            <strong>Dr. Kenshuk Marwah</strong> | MS, FICO (UK), DNB, FVRS | 18+ Years of trust<br>
+                            DMC Reg No: 29327 | shivomeyecare@gmail.com
+                        </p>
+                    </div>
+                </div>
+                <div class="text-right text-xs text-gray-600 space-y-1 font-medium">
+                    <p class="font-bold text-blue-700 text-sm">📞 Call / WhatsApp: +91 7827133830</p>
+                    <p class="mt-1">DDA Flats Kalkaji, Block L 1, Kalkaji,</p>
+                    <p>New Delhi, Delhi 110019</p>
+                    <p>Timings: Mon-Sat 9 AM to 9 PM</p>
+                    <p class="text-blue-600 font-bold text-xs pt-0.5">www.shivomeyecare.com</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="print-grid grid grid-cols-1 md:grid-cols-12 gap-6 text-sm border-b border-gray-200 pb-5 relative z-10">
+            <div class="print-col md:col-span-6 space-y-2">
+                <div class="flex items-center gap-1"><span class="font-bold text-gray-900 min-w-[75px]">Patient:</span><input type="text" id="bill_name" value="Master Yuvan" class="w-full bg-transparent font-black text-gray-900 focus:outline-none text-base"></div>
+                <div class="flex items-center gap-1"><span class="font-bold text-gray-600 min-w-[75px]">Age / Sex:</span><input type="text" id="bill_age_sex" value="16 Years / Male" class="w-full bg-transparent font-bold text-gray-800 focus:outline-none"></div>
+                <div class="flex items-center gap-1"><span class="font-bold text-gray-600 min-w-[75px]">Phone:</span><input type="text" id="bill_phone" value="8700719377" class="w-full bg-transparent font-bold text-gray-800 focus:outline-none"></div>
+                <div class="flex items-center gap-1"><span class="font-bold text-gray-600 min-w-[75px]">Address:</span><input type="text" id="bill_address" value="Gurugram, Haryana" class="w-full bg-transparent font-bold text-gray-800 focus:outline-none"></div>
+            </div>
+
+            <div class="print-col md:col-span-6 md:pl-8 space-y-2">
+                <div class="flex items-center gap-1"><span class="font-bold text-gray-600 min-w-[120px]">UHID No:</span><input type="text" id="bill_uhid" value="556" class="w-full bg-transparent font-black text-gray-900 focus:outline-none"></div>
+                
+                <div class="flex items-center gap-1">
+                    <span class="font-bold text-gray-600 min-w-[120px]">Booking Date:</span>
+                    <input type="text" id="bill_date" class="w-full bg-transparent font-bold text-gray-800 focus:outline-none">
+                </div>
+                
+                <div class="no-print flex items-center gap-1">
+                    <span class="font-bold text-gray-600 min-w-[120px]">Booking Sequence:</span>
+                    <input type="number" id="bill_seq_no" value="1" min="1" max="999" oninput="generateSystemInvoiceNumber()" class="w-20 border border-gray-300 rounded text-center px-1 py-0.5 font-bold text-gray-900"><span class="text-gray-400 text-[11px]">(Daily ID)</span>
+                </div>
+                
+                <div class="flex items-center gap-1">
+                    <span class="font-bold text-gray-900 min-w-[120px]">Invoice Number:</span>
+                    <input type="text" id="label_invoice_num" class="w-full bg-transparent font-black text-blue-900 tracking-wide focus:outline-none text-sm" value="Generating...">
+                </div>
+            </div>
+        </section>
+
+        <div class="text-center relative z-10">
+            <span class="text-sm font-black tracking-widest uppercase border-b-2 border-gray-800 px-8 pb-0.5 text-gray-900">Tax Invoice</span>
+        </div>
+
+        <section class="relative z-10">
+            <table class="w-full border-collapse border border-gray-300 text-sm text-center" id="invoice_table">
+                <thead>
+                    <tr class="bg-gray-50 border-b border-gray-300 font-bold text-gray-800 text-left">
+                        <th class="p-3 border-r border-gray-300 w-[60%] text-left">Particulars</th>
+                        <th class="p-3 border-r border-gray-300 text-right w-[15%]">Rate (Rs)</th>
+                        <th class="p-3 border-r border-gray-300 text-center w-[10%]">QTY</th>
+                        <th class="p-3 text-right w-[15%]">Amount (Rs)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200" id="billing_rows_body">
+                </tbody>
+            </table>
+        </section>
+
+        <datalist id="medications_services_list">
+        </datalist>
+
+        <section class="flex flex-col items-end pt-1 text-sm font-semibold text-gray-800 relative z-10">
+            <div class="w-full sm:w-1/2 border border-gray-300 divide-y divide-gray-200">
+
+                <div class="flex justify-between items-center p-3">
+                    <span class="text-right flex-1 pr-4 text-gray-600 font-bold uppercase text-xs">Total Amount (Before Tax):</span>
+                    <span class="w-24 text-right font-black text-gray-900" id="label_bill_amount">0</span>
+                </div>
+
+                <div class="flex justify-between items-center p-3 bg-slate-50/60">
+                    <div class="text-right flex-1 pr-4 flex items-center justify-end gap-1">
+                        <span class="text-gray-600 font-bold uppercase text-xs">Discount Amount:</span>
+                        <input type="text" id="input_discount" value="0" oninput="recalculateLedgerTotals()" class="w-20 border border-gray-300 rounded bg-white text-center text-xs font-black no-print py-0.5 text-gray-900">
+                        <span class="print:inline hidden text-gray-900 font-black text-xs" id="print_discount_label"></span>
+                    </div>
+                    <span class="w-24 text-right font-black text-gray-900" id="label_discount_computed">0</span>
+                </div>
+
+                <div class="flex justify-between items-center p-3 text-gray-700 bg-slate-50/30">
+                    <span class="text-right flex-1 pr-4 font-bold uppercase text-xs">CGST @ 2.5%:</span>
+                    <span class="w-24 text-right font-black text-gray-900" id="label_cgst">0</span>
+                </div>
+
+                <div class="flex justify-between items-center p-3 text-gray-700 bg-slate-50/30">
+                    <span class="text-right flex-1 pr-4 font-bold uppercase text-xs">SGST @ 2.5%:</span>
+                    <span class="w-24 text-right font-black text-gray-900" id="label_sgst">0</span>
+                </div>
+
+                <div class="flex justify-between items-center p-3 font-black bg-blue-50/30 text-gray-900">
+                    <span class="text-right flex-1 pr-4 uppercase text-xs tracking-wider">Final Payable Amount (Incl. GST):</span>
+                    <span class="w-24 text-right text-base font-black text-blue-900" id="label_payable">0</span>
+                </div>
+
+                <div class="flex justify-between items-center p-3">
+                    <div class="text-right flex-1 pr-4 flex items-center justify-end gap-1">
+                        <span class="text-gray-600 font-bold uppercase text-xs">Paid Amount:</span>
+                        <input type="number" id="input_paid" value="0" oninput="recalculateLedgerTotals()" class="w-24 border border-gray-300 rounded bg-white text-center text-xs font-black no-print py-0.5 text-gray-900">
+                    </div>
+                    <span class="w-24 text-right font-black text-gray-900" id="label_paid_printed">0</span>
+                </div>
+
+                <div class="flex justify-between items-center p-3 bg-red-50/40">
+                    <span class="text-right flex-1 pr-4 text-red-900 font-black uppercase text-xs">Outstanding Due:</span>
+                    <span class="w-24 text-right font-black text-red-700 text-base" id="label_balance">0</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="border border-gray-300 p-3 text-sm font-bold text-gray-800 rounded bg-gray-50/50 relative z-10 flex items-center gap-2">
+            <span class="text-gray-600 uppercase text-xs font-black min-w-[150px]">Received with Thanks:</span>
+            <div id="bill_words_amount" class="w-full font-black text-blue-900 tracking-wide uppercase italic">Rs. Zero Only</div>
+        </div>
+
+        <footer class="pt-20 flex justify-end items-center text-sm text-gray-800 font-bold relative z-10">
+            <div class="text-center w-64 border-t border-gray-400 pt-2">
+                <p class="text-gray-900 text-sm">Authorized Signatory</p>
+                <p class="text-xs text-gray-500 font-medium mt-0.5">Shivom Eye Care</p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // System Data Inventory Map
+        const PRICE_LIST = {
+            "Consultation ": 500,
+            "Consultation": 300,
+            "Dilated Fundus Exam": 300,
+            "Emergency Consultation": 2000,
+            "Follow-up (within 15 days)": 0,
+            "Follow-up (after 15 days)": 1300,
+            "Computer Vision Syndrome Evaluation": 1000,
+            "BP Check-up": 100,
+            "Medical Certificate": 500,
+            "Fundus Photography": 1500,
+            "Comprehensive Diabetic Eye Check-up": 1500,
+            "Dry Eye Examination": 1500,
+            "OCT (Both Eyes)": 5000,
+            "OCT (Single Eye)": 2500,
+            "Visual Field Test (Both Eyes)": 3500,
+            "Visual Field Test (Single Eye)": 2000,
+            "Fundus Photo (Both Eyes)": 1500,
+            "Fundus Photo (Single Eye)": 900,
+            "Pachymetry": 1000,
+            "Contact Lens Trial": 4000,
+            "Chalazion I&C (per eye)": 10000,
+            "Corneal Foreign Body Removal (Mild)": 500,
+            "Ocular Injury Charge (Mild)": 1000,
+            "Conjunctival Wash (per eye)": 500,
+            "Eye Patch": 500,
+            "NCT": 200,
+            "Akrosite": 160,
+            "Aurimox-CV Tablet": 200,
+            "Benzomin Plus Syrup": 111,
+            "Brishield": 200,
+            "Carboxy (CMC)": 100,
+            "Chloint H Eye Ointment": 71.42,
+            "Chloint PX Eye Ointment": 78.57,
+            "Choroid (Acetazolamide)": 45,
+            "CI Profloxacin": 80,
+            "Combilube": 185,
+            "Copvit": 100,
+            "Copvit Plus": 230,
+            "Cormega-500": 190,
+            "Dpanthom": 190,
+            "Ecofres HA": 525,
+            "Eye Drop – Motogrip": 255,
+            "Eye Drop – Olopro": 190,
+            "Eye Drop – Sono Max": 550,
+            "Eylys Dry Eye Mask": 3499,
+            "Ferr-XT": 150,
+            "Floppy": 100,
+            "Gatitec-F": 155,
+            "Gloprokt": 190,
+            "Hyura-PG": 403,
+            "Iloto": 140,
+            "Imega Tablet": 200,
+            "K-Fresh (CMC 1%)": 168,
+            "Katcin Plus": 150,
+            "Kripcon Gel Eye Mask": 299,
+            "Lipimax": 1950,
+            "Lopress-250": 45,
+            "Lotesol": 150,
+            "Lubcin": 375,
+            "Lutiz Kid Gummies": 355,
+            "Miboxy": 100,
+            "Miboxy-D": 120,
+            "Miboxy-KT": 120,
+            "Miboxy-P": 118,
+            "Misty Fresh": 390,
+            "Molef": 150,
+            "Molef-LP": 170,
+            "Motogrip": 255,
+            "Myflur": 100,
+            "Napah": 250,
+            "Nepafenac (Nepams)": 255,
+            "Nepafenac (Zubane)": 190,
+            "Nepatax": 180,
+            "Netanza": 120,
+            "Obin-F (Tobramycin)": 160,
+            "Objn-F": 160,
+            "Olopro": 160,
+            "Olopro-KT": 160,
+            "Omega 3 Fatty Acid 500 mg": 300,
+            "OLOPRO (Eye Drop)": 190,
+            "Opat": 170,
+            "Osmogreen (Omega-3)": 244,
+            "Pilocar": 85,
+            "Promaq Eye Care Gummies": 264.40,
+            "Protair-F Eye Drops": 160,
+            "Protair-F Tablet": 114.28,
+            "Qumoxi-LP": 164,
+            "RuteTears DS": 163,
+            "Safeatro": 200,
+            "Sono Fusion": 450,
+            "Sono Hyaluronate": 330,
+            "Spectacle Frame": 1300,
+            "Tobaped": 138,
+            "Travipress-PF": 220,
+            "Uvlot Eye Ointment": 190,
+            "Viscodew": 234,
+            "Vitoaxt-D": 236,
+            "Vorizone": 360,
+            "Zentob Eye Ointment": 190,
+            "Zenvit-Gold": 1017,
+            "Zol-AH": 100
+        };
+
+        function populateSearchDatalist() {
+            const datalist = document.getElementById('medications_services_list');
+            let optionsHtml = '';
+            const sortedKeys = Object.keys(PRICE_LIST).sort();
+            for (const item of sortedKeys) {
+                optionsHtml += `<option value="${item}"></option>`;
+            }
+            datalist.innerHTML = optionsHtml;
+        }
+
+        function handleItemSearchInput(inputElement) {
+            const currentTextValue = inputElement.value.trim();
+            const tr = inputElement.closest('tr');
+            const priceField = tr.querySelector('.price-field');
+
+            if (PRICE_LIST.hasOwnProperty(currentTextValue)) {
+                priceField.value = Math.round(PRICE_LIST[currentTextValue]);
+            }
+            recalculateLedgerTotals();
+        }
+
+        function convertAmountToWords(amount) {
+            if (amount === 0) return "Rs. Zero Only";
+            const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+            const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+            
+            let num = Math.floor(amount);
+            if ((num.toString()).length > 9) return "Overflow";
+            
+            let n = ('000000000' + num).substr(-9);
+            let crore = parseInt(n.substr(0, 2));
+            let lakh = parseInt(n.substr(2, 2));
+            let thousand = parseInt(n.substr(4, 2));
+            let hundred = parseInt(n.substr(6, 1));
+            let tens = parseInt(n.substr(7, 2));
+            
+            let str = '';
+            str += crore != 0 ? (a[crore] || b[crore[0]] + ' ' + a[crore[1]]) + 'Crore ' : '';
+            str += lakh != 0 ? (a[lakh] || b[lakh[0]] + ' ' + a[lakh[1]]) + 'Lakh ' : '';
+            str += thousand != 0 ? (a[thousand] || b[thousand[0]] + ' ' + a[thousand[1]]) + 'Thousand ' : '';
+            str += hundred != 0 ? a[hundred] + 'Hundred ' : '';
+            if (tens < 20) {
+                str += a[tens];
+            } else {
+                str += b[parseInt(n[7])] + ' ' + a[parseInt(n[8])];
+            }
+            return 'Rs. ' + str.trim() + ' Only';
+        }
+
+        function initializeDefaultDate() {
+            const dateInput = document.getElementById('bill_date');
+            if (dateInput && !dateInput.value) {
+                const today = new Date();
+                const dd = String(today.getDate()).padStart(2, '0');
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const yyyy = today.getFullYear();
+                dateInput.value = `${dd}/${mm}/${yyyy}`;
+            }
+        }
+
+        function generateSystemInvoiceNumber() {
+            const rawDateStr = document.getElementById('bill_date').value.trim();
+            const seqInput = document.getElementById('bill_seq_no').value || 1;
+            const paddedSequenceStr = String(seqInput).padStart(3, '0');
+            
+            let day = "00", month = "00", year = "00";
+
+            if (rawDateStr.includes('/')) {
+                const parts = rawDateStr.split('/');
+                if(parts.length >= 3) {
+                    day = parts[0].padStart(2, '0');
+                    month = parts[1].padStart(2, '0');
+                    year = parts[2].slice(-2); 
+                }
+            } else {
+                const parsedTimestamp = Date.parse(rawDateStr);
+                if (!isNaN(parsedTimestamp)) {
+                    const d = new Date(parsedTimestamp);
+                    day = String(d.getDate()).padStart(2, '0');
+                    month = String(d.getMonth() + 1).padStart(2, '0');
+                    year = String(d.getFullYear()).slice(-2);
+                }
+            }
+            document.getElementById('label_invoice_num').value = `${day}/${month}/${year}/${paddedSequenceStr}`;
+        }
+
+        function addNewBillingRow(initialService = "", initialPrice = 0) {
+            const tbody = document.getElementById('billing_rows_body');
+            const tr = document.createElement('tr');
+            const roundedPrice = Math.round(initialPrice);
+            
+            tr.innerHTML = `
+                <td class="p-3 border-r border-gray-300 text-left">
+                    <input type="text" list="medications_services_list" value="${initialService}" oninput="handleItemSearchInput(this)" placeholder="Type to search service or medicine..." class="particulars-input w-full bg-transparent focus:outline-none font-bold text-gray-900 border-b border-dashed border-gray-200 py-0.5">
+                </td>
+                <td class="p-3 border-r border-gray-300"><input type="number" value="${roundedPrice}" oninput="recalculateLedgerTotals()" class="w-full bg-transparent text-right focus:outline-none price-field font-bold"></td>
+                <td class="p-3 border-r border-gray-300"><input type="number" value="1" oninput="recalculateLedgerTotals()" class="w-full bg-transparent text-center focus:outline-none qty-field font-bold"></td>
+                <td class="p-3 font-black text-gray-900 text-right net-amount-cell">${roundedPrice}</td>
+            `;
+            tbody.appendChild(tr);
+            recalculateLedgerTotals();
+        }
+
+        function recalculateLedgerTotals() {
+            const tbody = document.getElementById('billing_rows_body');
+            let computedSubtotal = 0;
+
+            Array.from(tbody.children).forEach(row => {
+                const qty = parseFloat(row.querySelector('.qty-field').value) || 0;
+                const price = Math.round(parseFloat(row.querySelector('.price-field').value) || 0);
+                const netAmount = Math.round(qty * price);
+                
+                row.querySelector('.net-amount-cell').innerText = netAmount;
+                computedSubtotal += netAmount;
+            });
+
+            document.getElementById('label_bill_amount').innerText = computedSubtotal;
+
+            const discountInputStr = document.getElementById('input_discount').value.trim();
+            let computedDiscountVal = 0;
+
+            if (discountInputStr.includes('%')) {
+                const percentageFactor = parseFloat(discountInputStr.replace('%', '')) || 0;
+                computedDiscountVal = Math.round((percentageFactor / 100) * computedSubtotal);
+                document.getElementById('print_discount_label').innerText = `(${percentageFactor.toFixed(0)}%)`;
+            } else {
+                computedDiscountVal = Math.round(parseFloat(discountInputStr) || 0);
+                document.getElementById('print_discount_label').innerText = "";
+            }
+
+            document.getElementById('label_discount_computed').innerText = computedDiscountVal;
+
+            // Base taxable amount after matching target discount adjustments
+            const taxableBasisAmount = Math.max(0, computedSubtotal - computedDiscountVal);
+            
+            // Generate clean rounded 2.5% SGST and 2.5% CGST splits
+            const calculatedCgst = Math.round(taxableBasisAmount * 0.025);
+            const calculatedSgst = Math.round(taxableBasisAmount * 0.025);
+
+            document.getElementById('label_cgst').innerText = calculatedCgst;
+            document.getElementById('label_sgst').innerText = calculatedSgst;
+
+            const finalAmountPayable = taxableBasisAmount + calculatedCgst + calculatedSgst;
+            document.getElementById('label_payable').innerText = finalAmountPayable;
+
+            const currentPaidVal = Math.round(parseFloat(document.getElementById('input_paid').value) || 0);
+            document.getElementById('label_paid_printed').innerText = currentPaidVal;
+
+            const balanceOutstanding = finalAmountPayable - currentPaidVal;
+            document.getElementById('label_balance').innerText = balanceOutstanding;
+
+            document.getElementById('bill_words_amount').innerText = convertAmountToWords(currentPaidVal);
+        }
+
+        function clearInvoiceBoard() {
+            if(confirm("Are you sure you want to clean the active invoice grid completely?")) {
+                document.getElementById('bill_name').value = "";
+                document.getElementById('bill_phone').value = "";
+                document.getElementById('bill_age_sex').value = "";
+                document.getElementById('bill_address').value = "";
+                document.getElementById('input_discount').value = "0";
+                document.getElementById('input_paid').value = "0";
+                document.getElementById('bill_seq_no').value = "1";
+                
+                initializeDefaultDate();
+                document.getElementById('billing_rows_body').innerHTML = "";
+                addNewBillingRow();
+                generateSystemInvoiceNumber();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeDefaultDate();
+            populateSearchDatalist();
+            
+            addNewBillingRow("Consultation", 300);
+            addNewBillingRow("Sono Fusion", 450);
+            
+            generateSystemInvoiceNumber();
+            document.getElementById('bill_date').addEventListener('input', generateSystemInvoiceNumber);
+        });
+    </script>
+</body>
+</html>
